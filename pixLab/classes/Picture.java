@@ -327,6 +327,37 @@ public class Picture extends SimplePicture
 	    }   
     }
 
+        /** copy from the passed fromPic to the
+     * specified startRow and startCol in the
+     * current picture
+     * @param fromPic the picture to copy from
+     * @param startRow the start row to copy to
+     * @param startCol the start col to copy to
+     */
+    public void copy(Picture fromPic, 
+		     int startRow, int startCol, int endRow, int endCol)
+    {
+	Pixel fromPixel = null;
+	Pixel toPixel = null;
+	Pixel[][] toPixels = this.getPixels2D();
+	Pixel[][] fromPixels = fromPic.getPixels2D();
+	for (int fromRow = 0, toRow = startRow; 
+	     fromRow < fromPixels.length &&
+		 toRow < endRow; 
+	     fromRow++, toRow++)
+	    {
+		for (int fromCol = 0, toCol = startCol; 
+		     fromCol < fromPixels[0].length &&
+			 toCol < endCol;  
+		     fromCol++, toCol++)
+		    {
+			fromPixel = fromPixels[fromRow][fromCol];
+			toPixel = toPixels[toRow][toCol];
+			toPixel.setColor(fromPixel.getColor());
+		    }
+	    }   
+    }
+
     /** Method to create a collage of several pictures */
     public void createCollage()
     {
@@ -342,6 +373,41 @@ public class Picture extends SimplePicture
 	this.copy(flower2,500,0);
 	this.mirrorVertical();
 	this.write("collage.jpg");
+    }
+
+        /** Method to create a collage of my several pictures */
+    public void myCollage()
+    {
+	Picture flower1 = new Picture("flower1.jpg");
+	Picture flower2 = new Picture("flower2.jpg");
+	Picture flower3 = new Picture("jasonMohabirFetus.png");
+
+	Picture newFlow1 = new Picture(flower1);
+	newFlow1.keepOnlyBlue();
+	Picture newFlow2 = new Picture(flower2);
+	newFlow2.grayscale();
+	Picture newFlow3 = new Picture(flower3);
+	newFlow3.mirrorVerticalRightToLeft();
+	newFlow3.negate();
+
+	Picture newNewFlow1 = new Picture(newFlow1);
+	newNewFlow1.negate();
+	Picture newNewFlow2 = new Picture(newFlow2);
+	newNewFlow2.zeroBlue();
+	Picture newNewFlow3 = new Picture(newFlow3);
+	newNewFlow3.grayscale();
+	
+	this.copy(flower1,0,0,100,50);
+	this.copy(flower2,100,200,150,300);
+	this.copy(flower1,300,300,350,400);
+	this.copy(newFlow1,300,400,400,450);
+	this.copy(newFlow2,400,350,470,470);
+	this.copy(newFlow3,300,0,460,100);
+	this.copy(newNewFlow1,350,400,450,450);
+	this.copy(newNewFlow2,200,350,300,400);
+	this.copy(newNewFlow3,200,75,260,100);
+	this.mirrorVertical();
+	this.write("myCollage.jpg");
     }
   
   
